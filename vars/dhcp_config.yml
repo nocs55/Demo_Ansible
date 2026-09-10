@@ -1,0 +1,31 @@
+dhcp_pools:
+  - name: "POOL_VLAN10"
+    network: 10.10.10.0
+    mask: 255.255.255.0
+    gateway: 10.10.10.1 
+    dns: 8.8.8.8
+  - name: "POOL_VLAN20"
+    network: 10.10.20.0
+    mask: 255.255.255.0
+    gateway: 10.10.20.1 
+    dns: 8.8.8.8
+  - name: "POOL_VLAN30"
+    network: 10.10.30.0
+    mask: 255.255.255.0
+    gateway: 10.10.30.1 
+    dns: 8.8.8.8
+  - name: "POOL_VLAN40"
+    network: 10.10.40.0
+    mask: 255.255.255.0
+    gateway: 10.10.40.1 
+    dns: 8.8.8.8
+  - name: "POOL_VLAN50"
+    network: 10.10.50.0
+    mask: 255.255.255.0
+    gateway: 10.10.50.1 
+    dns: 8.8.8.8
+  - name: "POOL_VLAN60"
+    network: 10.10.60.0
+    mask: 255.255.255.0
+    gateway: 10.10.60.1 
+    dns: 8.8.8.8

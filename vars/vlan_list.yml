@@ -1,0 +1,13 @@
+network_vlans: #network_vlans la mot bien tuy chinh
+  - id: 10
+    name: "CNTT"
+  - id: 20
+    name: "Phap_Luat"
+  - id: 30
+    name: "Det_May"
+  - id: 40
+    name: "Dien_tu"
+  - id: 50
+    name: "Tu_dong_hoa"
+  - id: 60
+    name: "Ky_thuat"

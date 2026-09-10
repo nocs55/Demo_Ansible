@@ -1,0 +1,19 @@
+---
+- name: "Xoa sach VLAN tren toan bo Switch"
+  hosts: switches
+  gather_facts: no
+  tasks:
+    - name: "Xoa danh sach VLAN tu 2 den 6"
+      cisco.ios.ios_vlans:
+        config:
+          - vlan_id: 10
+          - vlan_id: 20
+          - vlan_id: 30
+          - vlan_id: 40
+          - vlan_id: 50
+          - vlan_id: 60
+        state: deleted
+
+    - name: "Luu cau hinh"
+      cisco.ios.ios_config:
+        save_when: always

@@ -1,0 +1,21 @@
+---
+- name: "Cau hinh cong Access cho cac Switch"
+  hosts: "switches:!S7_core" # Loai tru S7_core ngay tu dau
+  gather_facts: no
+
+  tasks:
+    - name: "Cau hinh switchport mode access va vlan"
+      cisco.ios.ios_l2_interfaces:
+        config:
+          - name: "{{ item.name }}"
+            mode: access
+            access:
+              vlan: "{{ item.vlan }}"
+        state: merged
+      #day la filter Jinja2, neu bien access_interface kh dc d/nghia cho host thi sd gtri default la 1 ds rong []
+      loop: "{{ access_interface | default([]) }}"
+      when: access_interface is defined # Chi chay neu Switch do co khai bao port
+
+    - name: "Luu cau hinh"
+      cisco.ios.ios_config:
+        save_when: always

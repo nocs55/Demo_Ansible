@@ -1,0 +1,33 @@
+---
+- name: "Backup tu dong cau hinh toan bo he thong"
+  hosts: all
+  gather_facts: no  
+
+  tasks:
+    - name: "Lay thoi gian hien tai tu may Ubuntu"
+      setup:
+        filter: "ansible_date_time"
+      delegate_to: localhost
+      run_once: true
+
+    - name: "Tao thu muc backup theo ngay"
+      delegate_to: localhost
+      ansible.builtin.file:
+        path: "./backups/{{ ansible_date_time.date }}"
+        state: directory
+      run_once: true
+
+    - name: "Lay cau hinh running-config tu thiet bi"
+      cisco.ios.ios_command:
+        commands: show running-config  
+      register: running_cfg
+
+    - name: "Luu cau hinh vao file tai may Ubuntu"
+      delegate_to: localhost
+      ansible.builtin.copy: 
+        content: "{{ running_cfg.stdout[0] }}"
+        dest: "./backups/{{ ansible_date_time.date }}/{{ inventory_hostname }}_{{ ansible_date_time.hour }}{{ ansible_date_time.minute }}.cfg"
+
+    - name: "Thong bao ket qua"
+      debug:
+        msg: "Da backup thanh cong cho {{ inventory_hostname }} vao thu muc backups/{{ ansible_date_time.date }}"

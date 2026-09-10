@@ -1,0 +1,5 @@
+access_interface:
+  - name: Ethernet0/1
+    vlan: 40
+  - name: Ethernet0/2
+    vlan: 40 

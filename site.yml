@@ -1,0 +1,8 @@
+---
+- import_playbook: create_vlans.yml
+- import_playbook: configure_router_l3.yml
+- import_playbook: create_access_ports.yml
+- import_playbook: configure_dhcp.yml
+- import_playbook: configure_acl.yml
+- import_playbook: configure_nat.yml
+- import_playbook: backup_config.yml

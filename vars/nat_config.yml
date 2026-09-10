@@ -1,0 +1,4 @@
+nat_inside_vlans: [10,20,30,40,50,60]
+internal_network_acl: "10.10.0.0 0.0.255.255"
+outside_interface: "Ethernet0/1"
+inside_interface_base: "Ethernet0/0"

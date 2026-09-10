@@ -1,0 +1,35 @@
+---
+- name: "Cau hinh NAT overload tren router1"
+  hosts: Router1
+  gather_facts: no
+  vars_files:
+    - vars/nat_config.yml
+
+  tasks:
+    - name: "Gan nhan NAT outside cho cong ngoai"
+      cisco.ios.ios_config:
+        lines:
+          - ip nat outside
+        parents: "interface {{ outside_interface }}"
+
+    - name: "Gan nhan NAT inside cho cac sub-interface"
+      cisco.ios.ios_config:
+        lines:
+          - ip nat inside
+        parents: "interface {{ inside_interface_base }}.{{ item }}"
+      loop: "{{ nat_inside_vlans }}"
+
+    - name: "Tao ACL cho phep NAT"
+      cisco.ios.ios_config:
+        lines:
+          - "access-list 1 permit {{ internal_network_acl }}"
+
+    - name: "Cau hinh NAT overload"
+      cisco.ios.ios_config:
+        lines:
+          - "ip nat inside source list 1 interface {{ outside_interface }} overload"
+    
+
+    - name: "Luu cau hinh"
+      cisco.ios.ios_config:
+        save_when: always

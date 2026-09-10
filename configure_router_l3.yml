@@ -1,0 +1,23 @@
+---
+- name: "Cau hinh sub-interface va IP helper cho Router1"
+  hosts: Router1
+  gather_facts: no
+  vars_files:
+    - vars/vlan_list.yml
+  vars:
+    dhcp_server_ip: "192.168.99.102"
+
+  tasks:
+    - name: "Tao sub-interface, encapsulation va ip helper"
+      cisco.ios.ios_config:
+        lines:
+          - "encapsulation dot1q {{ item.id }}"
+          - "ip address 10.10.{{ item.id }}.1 255.255.255.0"
+          - "ip helper-address {{ dhcp_server_ip }}"
+          - "no shutdown"
+        parents: "interface Ethernet0/0.{{ item.id }}"
+      loop: "{{ network_vlans }}"
+
+    - name: "Luu cau hinh"
+      cisco.ios.ios_config:
+        save_when: always

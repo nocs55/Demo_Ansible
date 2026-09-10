@@ -1,0 +1,33 @@
+all:
+  children:
+    routers:
+      hosts:
+        Router1:
+          ansible_host: 192.168.60.101
+        R_dhcp:
+          ansible_host: 192.168.99.102
+    switches:
+      hosts:
+        S7_core:
+          ansible_host: 192.168.99.7
+        S1:
+          ansible_host: 192.168.99.11
+        S2:
+          ansible_host: 192.168.99.12
+        S3:
+          ansible_host: 192.168.99.13
+        S4:
+          ansible_host: 192.168.99.14
+        S5:
+          ansible_host: 192.168.99.15
+        S6:
+          ansible_host: 192.168.99.16
+  vars:
+    ansible_user: admin
+    ansible_password: cisco123
+    ansible_connection: network_cli #la mot connection plugin cua Ansible danh rieng cho tbm
+    ansible_network_os: cisco.ios.ios
+    ansible_become: yes
+    ansible_become_method: enable
+    ansible_become_password: cisco123
+    ansible_ssh_common_args: "-o KexAlgorithms=+diffie-hellman-group-exchange-sha1 -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"

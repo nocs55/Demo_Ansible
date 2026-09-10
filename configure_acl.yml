@@ -1,0 +1,35 @@
+---
+- name: "Cau hinh ACL chan Internet cho mot so VLAN"
+  hosts: Router1
+  gather_facts: no
+  vars_files:
+    - vars/acl_config.yml
+
+  tasks:
+    - name: "Tao extended ACL tren router R1"
+      cisco.ios.ios_config:
+        lines:
+          - "remark mo cua cho DHCP"
+          - "permit udp any any eq 67"
+          - "permit udp any any eq 68"
+          - "remark Cho phep truy cap noi bo"
+          - "permit ip any {{ internal_network }}"
+          - "remark Chan cac huong con lai (Internet)"
+          - "deny ip any any"
+        parents: "ip access-list extended BLOCK_INTERNET"
+
+    - name: "Ap dung ACL vao cac sub-interface bi chan"
+      cisco.ios.ios_config:
+        lines:
+          - "ip access-group BLOCK_INTERNET in"
+        parents: "interface Ethernet0/0.{{ item.id }}"
+      loop: "{{ blocked_vlans }}"
+
+    - name: "Cau hinh Default Route de ra Internet"
+      cisco.ios.ios_config:
+        lines:
+          - "ip route 0.0.0.0 0.0.0.0 192.168.60.2"
+
+    - name: "Luu cau hinh"
+      cisco.ios.ios_config:
+        save_when: always

@@ -1,0 +1,26 @@
+---
+- name: "Cau hinh DHCP Server cho Router"
+  hosts: R_dhcp
+  gather_facts: no
+  vars_files:
+    - vars/dhcp_config.yml
+
+  tasks:
+    - name: "Loai bo dai IP tu .1 den .10 cho tung VLAN"
+      cisco.ios.ios_config:
+        lines:
+          - "ip dhcp excluded-address {{ item.gateway }} {{ item.network[:-1] }}10"
+      loop: "{{ dhcp_pools }}"
+
+    - name: "Tao va cau hinh cac DHCP Pool"
+      cisco.ios.ios_config:
+        parents: "ip dhcp pool {{ item.name }}"
+        lines:
+          - "network {{ item.network }} {{ item.mask }}"
+          - "default-router {{ item.gateway }}"
+          - "dns-server {{ item.dns }}"
+      loop: "{{ dhcp_pools }}"
+
+    - name: "Luu cau hinh"
+      cisco.ios.ios_config:
+        save_when: always

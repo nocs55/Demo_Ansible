@@ -1,0 +1,20 @@
+---
+- name: "Tu dong hoa cau hinh VLAN cho toan bo Switch"
+  hosts: switches
+  gather_facts: no #mot thuoc tinh de dieu khien bat/tat thu thap thong tin he thong
+  vars_files:
+    - vars/vlan_list.yml
+
+  tasks:
+    - name: "Tao VLAN tu danh sach vlan list"
+      cisco.ios.ios_vlans: #mot module trong collection cua Ansible
+        config:
+          - vlan_id: "{{ item.id }}"
+            name: "{{ item.name }}"
+            state: active
+        state: merged
+      loop: "{{ network_vlans }}"
+
+    - name: "Luu cau hinh vao NVRAM"
+      cisco.ios.ios_config: #mot module trong collection cua Ansible
+        save_when: always
